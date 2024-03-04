@@ -35,6 +35,8 @@ export const Filters = () => {
         brand: '',
     });
 
+    const isEmpty = !filter.price && !filter.productName && !filter.brand
+
     useEffect(() => {
         setFilters({ productName, brand, price });
     }, [brand, price, productName]);
@@ -80,6 +82,9 @@ export const Filters = () => {
         }));
     };
 
+    const handleClearClick = () => {
+        router.push('/')
+    }
 
     return (
         <div className={scss.filters_wrapper}>
@@ -105,9 +110,7 @@ export const Filters = () => {
                 name="productName"
                 placeholder="Введите название"
             />
-            <Link href='/'>
-                <Button>Очистить</Button>
-            </Link>
+                <Button disabled={isEmpty} onClick={handleClearClick}>Очистить</Button>
         </div>
     );
 };
