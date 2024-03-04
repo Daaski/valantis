@@ -1,95 +1,41 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { Column } from 'primereact/column';
+import { TableWrapper } from 'app/components/TableWrapper';
+import { PaginatorWrapper } from 'app/components/PaginatorWrapper';
+import { Filters } from 'app/components/Filters/Filters';
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import {
+    getBrand,
+    getFilteredItems,
+    getItems,
+    getItemsId,
+} from 'http/postService/postService';
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+import scss from './Home.module.scss';
+import { Suspense } from 'react';
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+export interface SearchParamsType {
+    page?: string;
+    brand?: string;
+    price?: number;
+    productName?: string;
+}
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+export default async function Home({
+    searchParams,
+}: {
+    searchParams: SearchParamsType;
+}) {
+    return (
+        <main className={scss.cards}>
+            <Filters />
+            <Suspense fallback={<h1>Загрузка...</h1>}>
+                <TableWrapper searchParams={searchParams}>
+                    <Column field="id" header="ID" />
+                    <Column field="product" header="Название" />
+                    <Column field="brand" header="Бренд" />
+                    <Column field="price" header="Цена" />
+                </TableWrapper>
+            </Suspense>
+        </main>
+    );
 }

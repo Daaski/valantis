@@ -1,0 +1,1 @@
+export { PaginatorWrapper } from './PaginatorWrapper';
